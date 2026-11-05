@@ -15,12 +15,12 @@ A four-VM mini search engine for the **UE24CS343AB2** course project. This repos
 
 ## Who does what?
 
-| Person | VM | Main ownership | Code modules |
-|---|---|---|---|
-| Node 2 | Node 2 | HDFS, Iceberg, snapshots, replication, storage tests | `storage/`, `config/hadoop/`, `config/iceberg/`, `scripts/node2/` |
-| Node 3 | Node 3 | Spark cluster, jobs, Parquet export, worker-failure testing | `export/`, `config/spark/`, `scripts/node3/` |
-| Node 1 (name TBD) | Node 1 | Data validation, deduplication, ingestion **and inverted-index code** | `ingestion/`, `indexing/`, `scripts/node1/` |
-| Node 4 (name TBD) | Node 4 | **PageRank code**, BM25, API, UI, version fallback | `pagerank/`, `search/`, `frontend/`, `scripts/node4/` |
+| VM | Main ownership | Code modules |
+|---|---|---|
+| Node 2 | HDFS, Iceberg, snapshots, replication, storage tests | `storage/`, `config/hadoop/`, `config/iceberg/`, `scripts/node2/` |
+| Node 3 | Spark cluster, jobs, Parquet export, worker-failure testing | `export/`, `config/spark/`, `scripts/node3/` |
+| Node 1 | Data validation, deduplication, ingestion **and inverted-index code** | `ingestion/`, `indexing/`, `scripts/node1/` |
+| Node 4 | **PageRank code**, BM25, API, UI, version fallback | `pagerank/`, `search/`, `frontend/`, `scripts/node4/` |
 
 **Important:** *Code author* and *VM that runs the driver* are different. Inverted-index/PageRank code may be authored on another laptop, but their Spark drivers must run on Node 3. This is a proposed team allocation; the professor has not assigned algorithm authors by node. We will rebalance work if Node 4 or Node 1 becomes overloaded.
 

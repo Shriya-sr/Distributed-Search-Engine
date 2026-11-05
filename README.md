@@ -17,10 +17,10 @@ A four-VM mini search engine for the **UE24CS343AB2** course project. This repos
 
 | Person | VM | Main ownership | Code modules |
 |---|---|---|---|
-| Divisha | Node 2 | HDFS, Iceberg, snapshots, replication, storage tests | `storage/`, `config/hadoop/`, `config/iceberg/`, `scripts/node2/` |
-| Harsimran | Node 3 | Spark cluster, jobs, Parquet export, worker-failure testing | `export/`, `config/spark/`, `scripts/node3/` |
-| Member 3 (name TBD) | Node 1 | Data validation, deduplication, ingestion **and inverted-index code** | `ingestion/`, `indexing/`, `scripts/node1/` |
-| Member 4 (name TBD) | Node 4 | **PageRank code**, BM25, API, UI, version fallback | `pagerank/`, `search/`, `frontend/`, `scripts/node4/` |
+| Node 2 | Node 2 | HDFS, Iceberg, snapshots, replication, storage tests | `storage/`, `config/hadoop/`, `config/iceberg/`, `scripts/node2/` |
+| Node 3 | Node 3 | Spark cluster, jobs, Parquet export, worker-failure testing | `export/`, `config/spark/`, `scripts/node3/` |
+| Node 1 (name TBD) | Node 1 | Data validation, deduplication, ingestion **and inverted-index code** | `ingestion/`, `indexing/`, `scripts/node1/` |
+| Node 4 (name TBD) | Node 4 | **PageRank code**, BM25, API, UI, version fallback | `pagerank/`, `search/`, `frontend/`, `scripts/node4/` |
 
 **Important:** *Code author* and *VM that runs the driver* are different. Inverted-index/PageRank code may be authored on another laptop, but their Spark drivers must run on Node 3. This is a proposed team allocation; the professor has not assigned algorithm authors by node. We will rebalance work if Node 4 or Node 1 becomes overloaded.
 
@@ -59,10 +59,10 @@ Phase 1: ingest changes **idempotently** → rebuild/update index and PageRank �
 ## Repo layout
 
 - `src/distributed_search/common/` — shared contracts and small helpers (changes require team approval)
-- `src/distributed_search/ingestion/`, `indexing/` — Node 1 / Member 3
-- `src/distributed_search/storage/` — Node 2 / Divisha
-- `src/distributed_search/export/` — Node 3 / Harsimran
-- `src/distributed_search/pagerank/`, `search/`, `frontend/` — Member 4
+- `src/distributed_search/ingestion/`, `indexing/` — Node 1 / Node 1
+- `src/distributed_search/storage/` — Node 2 / Node 2
+- `src/distributed_search/export/` — Node 3 / Node 3
+- `src/distributed_search/pagerank/`, `search/`, `frontend/` — Node 4
 - `config/` — configuration templates, not real credentials or IP-specific secrets
 - `scripts/node*/` — VM-specific setup/run scripts (to implement)
 - `tests/` — independent unit tests and later integration tests

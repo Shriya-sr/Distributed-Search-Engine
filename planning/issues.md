@@ -18,7 +18,7 @@ Agree on document keys, links, update/deletes, tokenization, postings, Parquet s
 
 ## [Node 2] Set up HDFS NameNode/DataNode with replication
 
-**Owner:** Node 2 / Divisha
+**Owner:** Node 2
 
 Configure Node 2 and coordinate Node 3 DataNode. Verify actual replication=2 and file read.
 
@@ -26,7 +26,7 @@ Configure Node 2 and coordinate Node 3 DataNode. Verify actual replication=2 and
 
 ## [Node 2] Set up Iceberg catalog, tables and snapshots
 
-**Owner:** Node 2 / Divisha
+**Owner:** Node 2
 
 Configure Iceberg in HDFS and implement snapshot history and rollback procedures.
 
@@ -34,7 +34,7 @@ Configure Iceberg in HDFS and implement snapshot history and rollback procedures
 
 ## [Node 2] Add storage startup, health-check and recovery scripts
 
-**Owner:** Node 2 / Divisha
+**Owner:** Node 2
 
 Document startup order, logs, storage health, restart procedure.
 
@@ -42,7 +42,7 @@ Document startup order, logs, storage health, restart procedure.
 
 ## [Node 3] Set up Spark Master and two Workers
 
-**Owner:** Node 3 / Harsimran
+**Owner:** Node 3
 
 Configure master on Node 3 and workers on Nodes 2 and 3; run distributed sample job.
 
@@ -50,7 +50,7 @@ Configure master on Node 3 and workers on Nodes 2 and 3; run distributed sample 
 
 ## [Node 3] Implement validated Parquet export
 
-**Owner:** Node 3 / Harsimran
+**Owner:** Node 3
 
 Publish versioned index, documents, stats and PageRank with validation manifest.
 
@@ -58,7 +58,7 @@ Publish versioned index, documents, stats and PageRank with validation manifest.
 
 ## [Node 3] Create job runner and fault-tolerance demonstration
 
-**Owner:** Node 3 / Harsimran
+**Owner:** Node 3
 
 Run indexing/PageRank drivers on Node 3; simulate worker failure, log recovery.
 
@@ -66,7 +66,7 @@ Run indexing/PageRank drivers on Node 3; simulate worker failure, log recovery.
 
 ## [Node 1] Implement Phase 0/1 input validation and deduplication
 
-**Owner:** Node 1 / Member 3
+**Owner:** Node 1
 
 Parse pages.jsonl (including 20 malformed lines), changes.json (JSONL; 50 DELETE + 50 UPSERT), handle missing links, deduplicate 20 identical duplicate IDs, apply operations, clean dangling links after deletes. No raw version column exists.
 
@@ -74,7 +74,7 @@ Parse pages.jsonl (including 20 malformed lines), changes.json (JSONL; 50 DELETE
 
 ## [Node 1] Implement idempotent Iceberg ingestion
 
-**Owner:** Node 1 / Member 3
+**Owner:** Node 1
 
 Spark driver on Node 1 submits to Node 3 master; merge changes into Iceberg.
 
@@ -82,7 +82,7 @@ Spark driver on Node 1 submits to Node 3 master; merge changes into Iceberg.
 
 ## [Index] Implement distributed inverted index
 
-**Owner:** Node 1 / Member 3
+**Owner:** Node 1
 
 Build postings term/doc/tf and BM25 stats with Spark; driver executed on Node 3.
 
@@ -90,7 +90,7 @@ Build postings term/doc/tf and BM25 stats with Spark; driver executed on Node 3.
 
 ## [PageRank] Implement iterative Spark PageRank
 
-**Owner:** Node 4 / Member 4
+**Owner:** Node 4
 
 Implement damping .85, >=10 iterations, dangling handling, driver run on Node 3.
 
@@ -98,7 +98,7 @@ Implement damping .85, >=10 iterations, dangling handling, driver run on Node 3.
 
 ## [Search] Implement BM25 and score combination
 
-**Owner:** Node 4 / Member 4
+**Owner:** Node 4
 
 Use k1=1.2 b=.75 and 0.7 normalized BM25 + 0.3 normalized PageRank.
 
@@ -106,7 +106,7 @@ Use k1=1.2 b=.75 and 0.7 normalized BM25 + 0.3 normalized PageRank.
 
 ## [Search] Build FastAPI and basic frontend
 
-**Owner:** Node 4 / Member 4
+**Owner:** Node 4
 
 Load completed local Parquet export and return ranked docs with identifying fields.
 
@@ -114,7 +114,7 @@ Load completed local Parquet export and return ranked docs with identifying fiel
 
 ## [Search] Implement safe version activation and fallback
 
-**Owner:** Node 4 / Member 4
+**Owner:** Node 4
 
 Activate only validated completed exports; keep v0 on failed v1.
 

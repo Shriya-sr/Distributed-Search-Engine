@@ -18,3 +18,10 @@ serving/
 *.jsonl
 .idea/
 .vscode/
+
+# Keep the two official course datasets in Git
+!data/
+data/*
+!data/.gitkeep
+!data/pages.jsonl
+!data/changes.json

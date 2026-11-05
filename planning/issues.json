@@ -1,0 +1,82 @@
+[
+  {
+    "owner": "Shared",
+    "title": "[Shared] Confirm audited source schemas and pin software versions",
+    "body": "Review docs/dataset-audit.md and docs/contracts.md. Confirm JSONL parsing despite changes.json suffix, missing version field and malformed Phase 0 records; then pin Java, Spark, Hadoop, Iceberg, Python and VM runtime versions.\n\n**Done when:** contracts approved and tested software version matrix documented."
+  },
+  {
+    "owner": "Shared",
+    "title": "[Shared] Approve contracts and toy test fixtures",
+    "body": "Agree on document keys, links, update/deletes, tokenization, postings, Parquet serving layout and API.\n\n**Done when:** docs/contracts.md approved and fixture files agreed."
+  },
+  {
+    "owner": "Node 2 / Divisha",
+    "title": "[Node 2] Set up HDFS NameNode/DataNode with replication",
+    "body": "Configure Node 2 and coordinate Node 3 DataNode. Verify actual replication=2 and file read.\n\n**Done when:** Two DataNodes healthy; fsck / replication evidence recorded."
+  },
+  {
+    "owner": "Node 2 / Divisha",
+    "title": "[Node 2] Set up Iceberg catalog, tables and snapshots",
+    "body": "Configure Iceberg in HDFS and implement snapshot history and rollback procedures.\n\n**Done when:** Spark writes and reads Iceberg; snapshots verified; rollback demonstrated."
+  },
+  {
+    "owner": "Node 2 / Divisha",
+    "title": "[Node 2] Add storage startup, health-check and recovery scripts",
+    "body": "Document startup order, logs, storage health, restart procedure.\n\n**Done when:** Scripts and reproducible storage runbook committed."
+  },
+  {
+    "owner": "Node 3 / Harsimran",
+    "title": "[Node 3] Set up Spark Master and two Workers",
+    "body": "Configure master on Node 3 and workers on Nodes 2 and 3; run distributed sample job.\n\n**Done when:** Workers register and run distributed job."
+  },
+  {
+    "owner": "Node 3 / Harsimran",
+    "title": "[Node 3] Implement validated Parquet export",
+    "body": "Publish versioned index, documents, stats and PageRank with validation manifest.\n\n**Done when:** Failed export cannot mark version complete; Node 4 can read complete export."
+  },
+  {
+    "owner": "Node 3 / Harsimran",
+    "title": "[Node 3] Create job runner and fault-tolerance demonstration",
+    "body": "Run indexing/PageRank drivers on Node 3; simulate worker failure, log recovery.\n\n**Done when:** Reproducible job launch and Spark failure test documented."
+  },
+  {
+    "owner": "Node 1 / Member 3",
+    "title": "[Node 1] Implement Phase 0/1 input validation and deduplication",
+    "body": "Parse pages.jsonl (including 20 malformed lines), changes.json (JSONL; 50 DELETE + 50 UPSERT), handle missing links, deduplicate 20 identical duplicate IDs, apply operations, clean dangling links after deletes. No raw version column exists.\n\n**Done when:** tests verify counts 1000 unique Phase 0 IDs and 975 unique Phase 1 IDs, invalid rows rejected and idempotency."
+  },
+  {
+    "owner": "Node 1 / Member 3",
+    "title": "[Node 1] Implement idempotent Iceberg ingestion",
+    "body": "Spark driver on Node 1 submits to Node 3 master; merge changes into Iceberg.\n\n**Done when:** Re-ingesting the same phase leaves table contents unchanged."
+  },
+  {
+    "owner": "Node 1 / Member 3",
+    "title": "[Index] Implement distributed inverted index",
+    "body": "Build postings term/doc/tf and BM25 stats with Spark; driver executed on Node 3.\n\n**Done when:** Toy expected postings and statistics match, distributed execution verified."
+  },
+  {
+    "owner": "Node 4 / Member 4",
+    "title": "[PageRank] Implement iterative Spark PageRank",
+    "body": "Implement damping .85, >=10 iterations, dangling handling, driver run on Node 3.\n\n**Done when:** Toy graph expected scores, normalization and iteration count checked."
+  },
+  {
+    "owner": "Node 4 / Member 4",
+    "title": "[Search] Implement BM25 and score combination",
+    "body": "Use k1=1.2 b=.75 and 0.7 normalized BM25 + 0.3 normalized PageRank.\n\n**Done when:** Deterministic ranking unit tests pass."
+  },
+  {
+    "owner": "Node 4 / Member 4",
+    "title": "[Search] Build FastAPI and basic frontend",
+    "body": "Load completed local Parquet export and return ranked docs with identifying fields.\n\n**Done when:** Search works without live Spark/HDFS daemons on Node 4."
+  },
+  {
+    "owner": "Node 4 / Member 4",
+    "title": "[Search] Implement safe version activation and fallback",
+    "body": "Activate only validated completed exports; keep v0 on failed v1.\n\n**Done when:** Failure test proves old search version is still served."
+  },
+  {
+    "owner": "Everyone",
+    "title": "[Integration] Complete Phase 0/1 main-corpus demo",
+    "body": "Run Phase 0 then apply changes.jsonl; verify search version, Iceberg snapshots, fault tolerance.\n\n**Done when:** Main corpus demonstrated with logs, timings and viva explanations."
+  }
+]

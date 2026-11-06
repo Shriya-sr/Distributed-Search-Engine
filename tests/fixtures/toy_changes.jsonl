@@ -1,0 +1,4 @@
+{"doc_id": "2", "op": "DELETE"}
+{"doc_id": "3", "op": "DELETE"}
+{"doc_id": "1", "op": "UPSERT", "url": "https://example.org/a-v2", "title": "Alpha Updated", "text": "alpha beta gamma delta updated", "links": ["4"]}
+{"doc_id": "9", "op": "UPSERT", "url": "https://example.org/new", "title": "New Doc", "text": "brand new document here", "links": []}

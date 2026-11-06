@@ -1,0 +1,7 @@
+{"doc_id": "1", "url": "https://example.org/a", "title": "Alpha", "text": "alpha beta gamma delta", "links": ["2", "3"]}
+{"doc_id": "2", "url": "https://example.org/b", "title": "Beta", "text": "beta gamma gamma epsilon", "links": ["1"]}
+{"doc_id": "3", "url": "https://example.org/c", "title": "Gamma", "text": "gamma delta delta delta", "links": []}
+{"doc_id": "4", "url": "https://example.org/d", "title": "Delta", "text": "delta epsilon zeta"}
+{"doc_id": "5", "url": "https://example.org/e", "title": "Epsilon", "text": "epsilon zeta alpha beta gamma", "links": ["1", "2"]}
+{"doc_id": "1", "url": "https://example.org/a", "title": "Alpha", "text": "alpha beta gamma delta", "links": ["2", "3"]}
+{this is malformed JSON and should be quarantined}

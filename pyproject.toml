@@ -7,7 +7,9 @@ name = "distributed-search-course"
 version = "0.1.0"
 description = "Scaffold for a four-node distributed search engine course project"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "pyarrow>=14,<24",
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10"]

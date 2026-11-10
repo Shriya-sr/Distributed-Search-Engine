@@ -26,3 +26,4 @@ data/*
 !data/pages.jsonl
 !data/changes.json
 !tests/fixtures/*.jsonl
+.venv-spark/

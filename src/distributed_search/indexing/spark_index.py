@@ -24,6 +24,8 @@ def _document_length(row):
 
 def build_distributed_index(spark, table: str, output: str, snapshot_id=None) -> dict:
     """Compute distributed BM25 statistics and save Parquet to HDFS."""
+    if snapshot_id is None:
+        raise ValueError("An explicit Iceberg snapshot ID is required")
     from pyspark.sql.types import (
         DoubleType, IntegerType, StringType, StructField, StructType
     )
@@ -96,6 +98,15 @@ def build_distributed_index(spark, table: str, output: str, snapshot_id=None) ->
             f"{staging}/corpus_stats"
         )
 
+        metadata_schema = StructType([
+            StructField("snapshot_id", StringType(), False),
+        ])
+        spark.createDataFrame(
+            [(str(snapshot_id),)], metadata_schema
+        ).write.mode("errorifexists").parquet(
+            f"{staging}/index_metadata"
+        )
+
         jvm = spark._jvm
         conf = spark._jsc.hadoopConfiguration()
         fs_path = jvm.org.apache.hadoop.fs.Path
@@ -113,7 +124,13 @@ def build_distributed_index(spark, table: str, output: str, snapshot_id=None) ->
                 f"Could not publish index: {output}"
             )
 
-        return {"N": n, "avgdl": avgdl, "output": output}
+        metadata = {
+            "N": n,
+            "avgdl": avgdl,
+            "output": output,
+            "snapshot_id": snapshot_id,
+        }
+        return metadata
     finally:
         docs.unpersist()
 
@@ -129,7 +146,7 @@ def main():
         "--table", default="search.db.pages"
     )
     parser.add_argument(
-        "--snapshot-id", type=int, default=None
+        "--snapshot-id", type=int, required=True
     )
     parser.add_argument(
         "--output-root",

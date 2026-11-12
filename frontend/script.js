@@ -2,6 +2,7 @@
 const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
 const searchButton = document.getElementById("search-button");
+const versionSelect = document.getElementById("version-select");
 
 const resultsSection = document.getElementById("results-section");
 const resultsContainer = document.getElementById("results-container");
@@ -15,6 +16,44 @@ const systemStatus = document.getElementById("system-status");
 const statusDot = document.querySelector(".status-dot");
 
 const API_BASE = "";
+
+// Discover available index versions from FastAPI.
+async function loadVersions() {
+    try {
+        const response = await fetch(`${API_BASE}/versions`);
+
+        if (!response.ok) {
+            throw new Error("Version discovery failed");
+        }
+
+        const data = await response.json();
+        const versions = data.available_versions || [];
+
+        versionSelect.replaceChildren();
+
+        for (const version of versions) {
+            const option = document.createElement("option");
+            option.value = String(version);
+            option.textContent = `Phase ${version}`;
+            versionSelect.appendChild(option);
+        }
+
+        if (versions.length > 0) {
+            versionSelect.value = String(data.default_version);
+            versionSelect.disabled = false;
+        } else {
+            versionSelect.add(new Option("No versions available", ""));
+            versionSelect.disabled = true;
+        }
+    } catch (error) {
+        versionSelect.replaceChildren();
+        const option = document.createElement("option");
+        option.value = "";
+        option.textContent = "Default version";
+        versionSelect.appendChild(option);
+        versionSelect.disabled = true;
+    }
+}
 
 // Check whether the backend is available.
 async function checkHealth() {
@@ -151,6 +190,10 @@ async function performSearch(query) {
             limit: 10
         });
 
+        if (!versionSelect.disabled && versionSelect.value !== "") {
+            params.set("version", versionSelect.value);
+        }
+
         const response = await fetch(
             `${API_BASE}/search?${params.toString()}`
         );
@@ -188,5 +231,6 @@ searchForm.addEventListener("submit", (event) => {
     performSearch(query);
 });
 
-// Check backend availability when the page loads.
+// Check backend availability and discover index versions.
 checkHealth();
+loadVersions();

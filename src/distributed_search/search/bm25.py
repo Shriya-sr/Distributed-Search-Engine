@@ -45,11 +45,20 @@ def compute_bm25(
     if n_docs < 0:
         raise ValueError("n_docs cannot be negative")
 
-    if avgdl <= 0:
-        raise ValueError("avgdl must be positive")
+    if not math.isfinite(avgdl) or avgdl < 0:
+        raise ValueError("avgdl must be finite and non-negative")
 
     if n_docs == 0:
         return {}
+
+    if avgdl == 0:
+        # All indexed documents have zero length.
+        # No valid term can have a positive frequency.
+        if any(int(row["doc_len"]) != 0 for row in doc_stats):
+            raise ValueError("Zero avgdl conflicts with document lengths")
+        if postings:
+            raise ValueError("Zero avgdl conflicts with nonempty postings")
+        return {str(row["doc_id"]): 0.0 for row in doc_stats}
 
     query_terms = tokenize(query)
 

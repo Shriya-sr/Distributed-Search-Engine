@@ -475,3 +475,35 @@ footer {
         padding: 15px 5%;
     }
 }
+
+
+/* Phase 0 / Phase 1 selector */
+.version-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.version-control select {
+    background: rgba(25, 30, 46, 0.9);
+    color: var(--text);
+    border: 1px solid #343149;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.version-control select:focus {
+    outline: 2px solid var(--pink);
+    outline-offset: 2px;
+}
+
+.version-control select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

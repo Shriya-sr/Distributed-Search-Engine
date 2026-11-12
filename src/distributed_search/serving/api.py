@@ -39,6 +39,15 @@ def create_app(
             serving_data = load_serving_data(configured_dir)
             app.state.search_service = SearchService(serving_data)
 
+        # Cache additional versions only when requested.
+        app.state.version_services = {
+            app.state.search_service.version: app.state.search_service
+        }
+        if service is None:
+            app.state.serving_root = Path(configured_dir).parent
+        else:
+            app.state.serving_root = None
+
         yield
 
     app = FastAPI(
@@ -90,23 +99,74 @@ def create_app(
             "version": search_service.version,
         }
 
+    def get_version_service(version: int | None):
+        default_service = getattr(app.state, "search_service", None)
+
+        if default_service is None:
+            raise HTTPException(503, "Search service is not ready")
+
+        if version is None:
+            return default_service
+
+        services = app.state.version_services
+
+        if version in services:
+            return services[version]
+
+        root = app.state.serving_root
+        if root is None:
+            raise HTTPException(404, "Requested version is unavailable")
+
+        version_dir = root / f"v{version}"
+        if not version_dir.is_dir():
+            raise HTTPException(404, "Requested version is unavailable")
+
+        try:
+            loaded = load_serving_data(version_dir)
+            if loaded["version"] != version:
+                raise ValueError("Export version mismatch")
+            selected = SearchService(loaded)
+        except (ValueError, OSError, KeyError) as exc:
+            raise HTTPException(
+                status_code=503,
+                detail=f"Version {version} could not be loaded",
+            ) from exc
+
+        services[version] = selected
+        return selected
+
+    @app.get("/versions")
+    def versions():
+        """List the serving versions currently available."""
+        default_service = getattr(app.state, "search_service", None)
+        if default_service is None:
+            raise HTTPException(503, "Search service is not ready")
+
+        available = set(app.state.version_services)
+        root = app.state.serving_root
+
+        if root is not None and root.is_dir():
+            for candidate in root.iterdir():
+                if (
+                    candidate.is_dir()
+                    and candidate.name in ("v0", "v1")
+                    and (candidate / "manifest.json").is_file()
+                ):
+                    available.add(int(candidate.name[1:]))
+
+        return {
+            "default_version": default_service.version,
+            "available_versions": sorted(available),
+        }
+
     @app.get("/search")
     def search(
         q: str = Query(..., min_length=1, description="Search query"),
         limit: int = Query(10, ge=1, le=100),
+        version: int | None = Query(None, ge=0, le=1),
     ) -> dict[str, Any]:
         """Search documents and return ranked results."""
-        search_service = getattr(
-            app.state,
-            "search_service",
-            None,
-        )
-
-        if search_service is None:
-            raise HTTPException(
-                status_code=503,
-                detail="Search service is not ready",
-            )
+        search_service = get_version_service(version)
 
         try:
             return search_service.search(q, limit)

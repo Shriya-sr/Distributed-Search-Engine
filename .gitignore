@@ -13,7 +13,7 @@ dist/
 *.egg-info/
 data/*
 !data/.gitkeep
-serving/
+/serving/
 *.parquet
 *.jsonl
 .idea/
